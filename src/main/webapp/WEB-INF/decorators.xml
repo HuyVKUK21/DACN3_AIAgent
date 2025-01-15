@@ -1,0 +1,22 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<decorators defaultdir="/decorators">    
+    <!-- Apply admin template -->
+    <decorator name="admin" page="admin.jsp">
+       <pattern>/admin*</pattern>
+    </decorator>
+    <decorator name="user" page="user.jsp">
+       <pattern>/user*</pattern>
+    </decorator>
+    
+    <decorator name="customer" page="customer.jsp">
+       <pattern>/customer*</pattern>
+    </decorator>
+    
+   <!-- Exclude specific paths from decoration -->
+    <excludes>
+        <pattern>/home</pattern>
+        <pattern>/api*</pattern>
+        <pattern>/error/404</pattern> <!-- Exclude the 404 error page -->
+    </excludes>
+    
+</decorators>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:websocket="http://www.springframework.org/schema/websocket"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/websocket
+        http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd">
+
+    <!-- Cấu hình PropertySourcesPlaceholderConfigurer để đọc tệp properties -->
+    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="location" value="classpath:application.properties"/>
+    </bean>
+    
+    <!-- Bean for message source -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages" />
+        <property name="defaultEncoding" value="UTF-8" />
+    </bean>
+
+    <!-- Bean for validator factory -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="validationMessageSource" ref="messageSource" />
+    </bean>  
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="100000000" />
+    </bean>
+
+    <!-- Enable component scanning -->
+    <context:component-scan base-package="com.fsoft" />
+    
+    <!-- Enable annotation configuration -->
+    <context:annotation-config/>
+
+    <!-- WebSocket Configuration -->
+    <bean id="webSocketConfig" class="com.fsoft.config.WebSocketConfig"/>
+
+    <!-- WebSocket Message Broker Configuration -->
+    <websocket:message-broker application-destination-prefix="/app">
+        <websocket:stomp-endpoint path="/ws">
+            <websocket:sockjs/>
+        </websocket:stomp-endpoint>
+        <websocket:simple-broker prefix="/topic"/>
+    </websocket:message-broker>
+
+</beans> 
